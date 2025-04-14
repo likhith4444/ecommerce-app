@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home - E-Commerce</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      color: #ff6b00;
+    }
+
+    header .nav-links a {
+      margin-left: 15px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      padding: 8px 16px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .product img {
+      max-width: 100%;
+      height: 150px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .product h3 {
+      margin: 10px 0 5px;
+      color: #333;
+    }
+
+    .product p {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .product button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      border: none;
+      background-color: #ff6b00;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .product button:hover {
+      background-color: #e55d00;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PUMA Store</h1>
+    <div class="nav-links">
+      <a href="profile.html">Profile</a>
+      <a href="cart.html">Cart</a>
+    </div>
+  </header>
+
+  <section class="products">
+    <div class="product">
+      <img src="sneaker.jpg" alt="Sneakers">
+      <h3>Sneakers</h3>
+      <p>Classic low-top sneakers for everyday wear.</p>
+      <button onclick="addToCart(1)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="smartwatch.jpg" alt="Smart Watch">
+      <h3>Smart Watch</h3>
+      <p>Fitness tracker with heart rate monitor.</p>
+      <button onclick="addToCart(2)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="street.jpg" alt="Street Sneakers">
+      <h3>Street Sneakers</h3>
+      <p>Designed for urban vibes and weekend wear.</p>
+      <button onclick="addToCart(3)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <img src="high.jpg" alt="High Tops">
+      <h3>High Tops</h3>
+      <p>High ankle support and bold design.</p>
+      <button onclick="addToCart(4)">Add to Cart</button>
+    </div>
+  </section>
+
+  <script>
+    function addToCart(productId) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+        alert("Please log in to add items to cart.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      fetch(`http://localhost:8080/api/cart/add?userId=${user.id}&productId=${productId}`, {
+        method: "POST"
+      })
+        .then(res => {
+          if (res.ok) {
+            alert("✅ Product added to cart!");
+          } else {
+            throw new Error("Failed to add to cart");
+          }
+        })
+        .catch(err => {
+          alert("❌ Error adding to cart.");
+          console.error(err);
+        });
+    }
+  </script>
+</body>
+</html>

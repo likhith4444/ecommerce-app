@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - E-Commerce</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body, html {
+      height: 100%;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .left-pane {
+      flex: 1;
+      background: url('shop.jpg') no-repeat center center;
+      background-size: contain;
+      background-color: #000;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 30px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .right-pane {
+      flex: 1;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    .btn {
+      background-color: #ff6b00;
+      color: #fff;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background-color: #e55d00;
+    }
+
+    .switch-link {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .switch-link a {
+      color: #ff6b00;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .left-pane {
+        height: 200px;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        padding: 10px;
+        background-size: cover;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-pane">
+      <div>PUMA — Style Meets Comfort</div>
+    </div>
+
+    <div class="right-pane">
+      <div class="form-container">
+        <h2>Welcome Back!</h2>
+        <form id="loginForm">
+          <input type="email" id="email" placeholder="Enter your email" required />
+          <input type="password" id="password" placeholder="Enter your password" required />
+          <button type="submit" class="btn">Login</button>
+        </form>
+        <div class="switch-link">
+          Don’t have an account? <a href="register.html">Register Now ›››</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      fetch("http://localhost:8080/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Login failed");
+          return res.json();
+        })
+        .then((data) => {
+          localStorage.removeItem("user"); // optional clean-up
+          localStorage.setItem("user", JSON.stringify(data));
+          window.location.href = "index.html";
+        })
+        .catch((err) => {
+          alert("❌ Invalid credentials. Please try again.");
+          console.error(err);
+        });
+    });
+  </script>
+</body>
+</html>

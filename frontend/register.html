@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - E-Commerce</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body, html {
+      height: 100%;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .left-pane {
+      flex: 1;
+      background: url('shop.jpg') no-repeat center center;
+      background-size: contain;
+      background-color: #000;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 30px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .right-pane {
+      flex: 1;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    .btn {
+      background-color: #ff6b00;
+      color: #fff;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background-color: #e55d00;
+    }
+
+    .switch-link {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .switch-link a {
+      color: #ff6b00;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .left-pane {
+        height: 200px;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        padding: 10px;
+        background-size: cover;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-pane">
+      <div>PUMA — Style Meets Comfort</div>
+    </div>
+
+    <div class="right-pane">
+      <div class="form-container">
+        <h2>Create Account</h2>
+        <form id="registerForm">
+          <input type="text" id="username" placeholder="Enter your username" required />
+          <input type="email" id="email" placeholder="Enter your email" required />
+          <input type="password" id="password" placeholder="Create a password" required />
+          <button type="submit" class="btn">Register</button>
+        </form>
+        <div class="switch-link">
+          Already have an account? <a href="login.html">Login Now ›››</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      fetch("http://localhost:8080/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password }),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Registration failed");
+          return res.json();
+        })
+        .then((data) => {
+          localStorage.setItem("user", JSON.stringify(data)); // Store user info
+          window.location.href = "index.html"; // Redirect to homepage
+        })
+        .catch((err) => {
+          alert("❌ Registration failed. Please try again.");
+          console.error(err);
+        });
+    });
+  </script>
+</body>
+</html>
